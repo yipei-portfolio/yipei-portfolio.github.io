@@ -192,7 +192,7 @@ export default function Home() {
 
         <section className="interests theme-section" data-bg="#f1efeb" data-ink="#171717">
           <div className="interests-head reveal">
-            <span>MORE THINGS I CARE ABOUT</span><span>02 — 04</span>
+            <span>MORE THINGS I CARE ABOUT</span><span>02 — 03</span>
           </div>
           <div className="interest-row reveal">
             <span className="interest-number">02</span><h3>数据故事</h3>
@@ -201,10 +201,6 @@ export default function Home() {
           <div className="interest-row reveal">
             <span className="interest-number">03</span><h3>AI 工具实验</h3>
             <p>我会把日常重复的小任务做成轻量工具，实际使用后再判断它是否真的节省时间。比起展示“智能”，我更关心体验是否可靠。</p>
-          </div>
-          <div className="interest-row reveal">
-            <span className="interest-number">04</span><h3>城市咖啡观察</h3>
-            <p>咖啡店也是观察城市的一扇窗口。我记录菜单、空间、街区与人的关系，希望慢慢整理出一份带有个人视角的上海咖啡地图。</p>
           </div>
         </section>
 
