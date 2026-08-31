@@ -35,7 +35,11 @@
     "build",
     "db",
     "examples",
+    "FindJobs-Agent",
+    "job-hub-install",
     "worker",
+    "WeFlow-main",
+    "WeFlow-source",
     "drizzle.config.ts",
     "vite.config.ts"
   ]

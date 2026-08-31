@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://yipei-portfolio.github.io"),
   title: "李忆沛 · Stay curious",
-  description: "李忆沛的个人主页：数据、产品、AI、合唱与 ChorusPrep。",
+  description: "李忆沛的个人主页：数据、产品、AI、合唱与 ChorusGO。",
   openGraph: {
     title: "李忆沛 · Stay curious",
     description: "Stay curious. Make things clear.",
