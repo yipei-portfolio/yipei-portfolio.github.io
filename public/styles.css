@@ -1083,3 +1083,83 @@ footer {
     transform: translate3d(0, 0, 0) rotate(0deg) scaleX(var(--letter-condense)) !important;
   }
 }
+
+
+/* ChorusGO RC1 portfolio snapshot */
+.project-snapshot {
+  margin: 72px var(--page-left) 0;
+  border-top: 1px solid rgba(40,40,40,.48);
+  border-bottom: 1px solid rgba(40,40,40,.48);
+}
+.snapshot-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(40,40,40,.26);
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+.snapshot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.snapshot-grid article {
+  min-height: 260px;
+  padding: 25px 24px 28px;
+  border-right: 1px solid rgba(40,40,40,.26);
+}
+.snapshot-grid article:first-child { padding-left: 0; }
+.snapshot-grid article:last-child { padding-right: 0; border-right: 0; }
+.snapshot-label {
+  display: block;
+  min-height: 38px;
+  font-family: "Courier New", monospace;
+  font-size: 9px;
+  letter-spacing: .1em;
+  opacity: .62;
+}
+.snapshot-grid strong {
+  display: block;
+  max-width: 260px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(23px, 2.2vw, 34px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -.025em;
+}
+.snapshot-grid p {
+  margin: 22px 0 0;
+  color: rgba(40,40,40,.72);
+  font-size: 12px;
+  line-height: 1.72;
+}
+.snapshot-gate { background: rgba(248,247,245,.55); }
+.snapshot-gate strong { font-style: italic; }
+
+@media (max-width: 900px) {
+  .snapshot-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .snapshot-grid article { border-bottom: 1px solid rgba(40,40,40,.26); }
+  .snapshot-grid article:nth-child(2) { border-right: 0; padding-right: 0; }
+  .snapshot-grid article:nth-child(3) { padding-left: 0; border-bottom: 0; }
+  .snapshot-grid article:nth-child(4) { border-bottom: 0; }
+}
+@media (max-width: 600px) {
+  .project-snapshot { margin: 48px 0 0; }
+  .snapshot-head { align-items: flex-start; flex-direction: column; gap: 6px; }
+  .snapshot-grid { grid-template-columns: 1fr; }
+  .snapshot-grid article,
+  .snapshot-grid article:first-child,
+  .snapshot-grid article:nth-child(2),
+  .snapshot-grid article:nth-child(3),
+  .snapshot-grid article:last-child {
+    min-height: 0;
+    padding: 25px 0 28px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(40,40,40,.26);
+  }
+  .snapshot-grid article:last-child { border-bottom: 0; }
+  .snapshot-label { min-height: 28px; }
+  .snapshot-grid strong { max-width: 330px; font-size: 29px; }
+}
