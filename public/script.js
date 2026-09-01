@@ -231,23 +231,56 @@ window.addEventListener("scroll", updateParallax, { passive: true });
 updateParallax();
 
 const copyWechat = document.querySelector(".copy-wechat");
+const wechatCanvas = document.querySelector(".wechat-canvas");
 const copyFeedback = document.querySelector(".copy-feedback");
+const wechatParts = ["134", "8211", "7805"];
+const resolveWechat = () => wechatParts.join("");
 let feedbackTimer;
 
+const drawWechat = () => {
+  if (!wechatCanvas) return;
+  const bounds = wechatCanvas.getBoundingClientRect();
+  if (!bounds.width || !bounds.height) return;
+
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, 3);
+  wechatCanvas.width = Math.round(bounds.width * pixelRatio);
+  wechatCanvas.height = Math.round(bounds.height * pixelRatio);
+
+  const context = wechatCanvas.getContext("2d");
+  if (!context) return;
+
+  const styles = getComputedStyle(wechatCanvas);
+  const fontSize = Number.parseFloat(styles.fontSize) || 32;
+  context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  context.clearRect(0, 0, bounds.width, bounds.height);
+  context.font = `300 ${fontSize}px ${styles.fontFamily}`;
+  context.fillStyle = styles.color;
+  context.textAlign = "left";
+  context.textBaseline = "middle";
+  context.fillText(resolveWechat(), 0, bounds.height / 2);
+};
+
+const refreshWechatCanvas = () => {
+  requestAnimationFrame(drawWechat);
+  window.setTimeout(drawWechat, 280);
+};
+
+drawWechat();
+document.fonts?.ready.then(drawWechat);
+window.addEventListener("resize", drawWechat, { passive: true });
+if (window.ResizeObserver && wechatCanvas) {
+  new ResizeObserver(drawWechat).observe(wechatCanvas);
+}
+["pointerenter", "pointerleave", "focus", "blur"].forEach((eventName) => {
+  copyWechat?.addEventListener(eventName, refreshWechatCanvas);
+});
+
 copyWechat?.addEventListener("click", async () => {
-  const value = copyWechat.dataset.copy;
+  const value = resolveWechat();
   try {
     await navigator.clipboard.writeText(value);
   } catch {
-    const input = document.createElement("textarea");
-    input.value = value;
-    input.setAttribute("readonly", "");
-    input.style.position = "fixed";
-    input.style.opacity = "0";
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand("copy");
-    input.remove();
+    return;
   }
   copyFeedback?.classList.add("is-visible");
   clearTimeout(feedbackTimer);
