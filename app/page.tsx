@@ -157,7 +157,7 @@ export default function Home() {
           </div>
           <div className="project-stage">
             <div className="project-shot reveal">
-              <img src="/chorusprep-practice.png" alt="ChorusGO 分声部乐谱练习室界面" width="974" height="768" />
+              <img src="/chorusgo-miniprogram.jpeg" alt="ChorusGO 微信小程序登录界面" width="974" height="768" />
             </div>
             <span className="stage-note note-a">SCORE<br />PRACTICE</span>
             <span className="stage-note note-b">RECORD<br />FEEDBACK</span>
