@@ -145,7 +145,7 @@ export default function Home() {
         <section className="work-intro theme-section" id="work" data-bg="#f8f7f5" data-ink="#171717">
           <span className="section-kicker reveal">SELECTED EXPLORATION</span>
           <h2 className="reveal">A real problem.<br />A working product.</h2>
-          <p className="reveal">ChorusPrep 来自我在合唱团管理与排练中的真实观察。它也是一次从问题定义、流程设计到工程实现的完整产品练习。</p>
+          <p className="reveal">ChorusGO 来自我在合唱团管理与排练中的真实观察。它把一次产品练习推进成了可验证的 RC1：从问题定义、角色权限，到小程序交互、后端契约与发布门禁。</p>
         </section>
 
         <section className="chorus-project theme-section" data-bg="#e8e5df" data-ink="#171717">
@@ -153,40 +153,68 @@ export default function Home() {
             <span>01 / FEATURED PROJECT</span><span>2026</span>
           </div>
           <div className="project-title reveal">
-            <h2>ChorusPrep</h2><p>大学合唱团课前预习与分声部练习平台</p>
+            <h2>ChorusGO</h2><p>大学合唱团课前预习、分声部练习与人工回课平台</p>
           </div>
           <div className="project-stage">
             <div className="project-shot reveal">
-              <img src="/chorusprep-practice.png" alt="ChorusPrep 分声部乐谱练习室界面" width="1304" height="1243" />
+              <img src="/chorusprep-practice.png" alt="ChorusGO 分声部乐谱练习室界面" width="1304" height="1243" />
             </div>
-            <span className="stage-note note-a">SATB<br />VOICE MIX</span>
-            <span className="stage-note note-b">REAL AUDIO<br />FEEDBACK</span>
+            <span className="stage-note note-a">WECHAT<br />RC1</span>
+            <span className="stage-note note-b">MANUAL<br />REVIEW</span>
+          </div>
+          <div className="project-snapshot reveal" aria-label="ChorusGO RC1 本地快照">
+            <div className="snapshot-head">
+              <span>LOCAL RC1 SNAPSHOT</span>
+              <span>FACT-CHECKED · 2026.08.30</span>
+            </div>
+            <div className="snapshot-grid">
+              <article>
+                <span className="snapshot-label">PRODUCT</span>
+                <strong>一条完整的人工回课链路</strong>
+                <p>指挥发布示范音频与练习任务，团员分声部练习、录音并提交，教师保存草稿后再发布分数、评语与通过 / 重录结论。</p>
+              </article>
+              <article>
+                <span className="snapshot-label">VERIFIED LOCALLY</span>
+                <strong>1,166 checks across the stack</strong>
+                <p>API 496 项、Web 68 项、小程序 596 项测试通过，另有 6 条隔离 E2E；TypeScript 与 release 构建通过。</p>
+              </article>
+              <article>
+                <span className="snapshot-label">ENGINEERING</span>
+                <strong>把失败也设计成可定位的状态</strong>
+                <p>围绕 PDF、录音与调音器建立权限、超时和错误分类诊断；同时保留角色隔离、逾期标记、批改历史与指挥转让约束。</p>
+              </article>
+              <article className="snapshot-gate">
+                <span className="snapshot-label">OPEN GATE</span>
+                <strong>RC1 candidate — not production yet</strong>
+                <p>线上 API 升级、微信平台配置、iOS / Android 真机与弱网回归仍待完成。这里展示的是本地验证快照，不把模拟器结果写成上线证明。</p>
+              </article>
+            </div>
           </div>
           <div className="project-story">
             <div className="story-intro reveal">
               <span>从排练现场到可以使用的产品</span>
               <p className="story-lead">
-                把指挥布置任务、团员分声部练习、录音提交和教师复盘连接成一条完整流程，让课前排练更有针对性。
+                把谱面、声部练习、示范音频、录音提交和教师人工回课连接成一条清晰流程，让课前准备不再散落在文件与群消息里。
               </p>
               <p className="story-context">
-                作为合唱团团长和助理指挥，我观察到课前练习经常分散在不同文件、消息和录音里：团员不容易快速找到自己的声部，教师也很难及时了解练习完成情况。ChorusPrep 尝试把这些环节放进同一条清晰、可反馈的流程。
+                作为合唱团团长和助理指挥，我观察到课前练习经常分散在不同文件、消息和录音里：团员不容易快速找到自己的声部，教师也很难及时了解练习完成情况。ChorusGO 用微信小程序承接高频练习场景，并用清楚的角色权限与发布边界保护反馈过程。
               </p>
             </div>
             <div className="story-list reveal">
-              <div><span>01</span><p>上传 MusicXML、PDF 或 MuseScore 乐谱，识别并校对 SATB 声部。</p></div>
-              <div><span>02</span><p>分声部播放与混音，支持节拍器、调速和指定小节循环。</p></div>
-              <div><span>03</span><p>分析录音的音准、节奏与完整度，生成个人及教师报告。</p></div>
+              <div><span>01</span><p>以 PDF 为主谱面，可选补充 MusicXML 或 MuseScore 播放源；即使播放源失败，谱面仍可阅读。</p></div>
+              <div><span>02</span><p>按 SATB 声部播放与混音，支持节拍器、调速、指定小节循环与自主练习。</p></div>
+              <div><span>03</span><p>团员回听后提交真实录音；教师人工评分、写评语并决定通过或重录，结果发布后才对团员可见。</p></div>
             </div>
           </div>
           <div className="project-reflection reveal">
             <span>WHAT I LEARNED</span>
             <p>
-              这个项目让我练习把模糊的现场需求拆成角色、任务和反馈节点，也让我不断在产品体验与技术可行性之间做取舍。比起一次性做出所有功能，我更重视先建立可使用的核心流程，再通过测试和复盘逐步改善。
+              这个项目让我把现场需求拆成产品契约、角色权限、失败状态与发布证据。更重要的是，我学会区分“代码已经完成”“本地已经验证”和“用户环境已经通过”——可靠的产品不仅要能运行，也要诚实地说明尚未完成的最后一公里。
             </p>
           </div>
           <div className="tech-line reveal">
-            <span>NEXT.JS</span><span>FASTAPI</span><span>SQLITE</span>
-            <span>VEROVIO</span><span>MUSESCORE</span><span>PYIN</span>
+            <span>TARO / REACT</span><span>WECHAT MINI PROGRAM</span><span>NEXT.JS</span>
+            <span>FASTAPI</span><span>SQLITE</span><span>VEROVIO</span><span>MUSESCORE</span>
           </div>
         </section>
 
