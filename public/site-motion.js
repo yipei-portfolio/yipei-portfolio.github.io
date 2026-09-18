@@ -94,6 +94,25 @@ export function sampleHeadShake(progress, vector, profile) {
   };
 }
 
+export function getThemeSectionIndex(rects, probeY) {
+  if (!rects.length) return -1;
+
+  const containing = rects.findIndex(
+    (rect) => rect.top <= probeY && rect.bottom > probeY,
+  );
+  if (containing >= 0) return containing;
+
+  return rects.reduce(
+    (closest, rect, index) => {
+      const distance = rect.bottom <= probeY
+        ? probeY - rect.bottom
+        : rect.top - probeY;
+      return distance < closest.distance ? { index, distance } : closest;
+    },
+    { index: -1, distance: Number.POSITIVE_INFINITY },
+  ).index;
+}
+
 export function applySectionTheme(rootStyle, themeMeta, background, ink) {
   rootStyle.setProperty("--current-bg", background);
   rootStyle.setProperty("--current-ink", ink);

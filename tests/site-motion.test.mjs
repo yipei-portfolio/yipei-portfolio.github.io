@@ -5,6 +5,7 @@ import {
   LETTER_MOTION_PROFILES,
   applySectionTheme,
   getEntryVector,
+  getThemeSectionIndex,
   sampleHeadShake,
 } from "../public/site-motion.js";
 
@@ -118,4 +119,21 @@ test("section theme updates the browser theme color when the meta tag exists", (
   assert.equal(values.get("--current-bg"), "#e8e5df");
   assert.equal(values.get("--current-ink"), "#171717");
   assert.equal(attributes.get("content"), "#e8e5df");
+});
+
+test("section theme follows the viewport probe in both scroll directions", () => {
+  const downward = [
+    { top: -700, bottom: -20 },
+    { top: -20, bottom: 620 },
+    { top: 620, bottom: 1280 },
+  ];
+  const upward = [
+    { top: -80, bottom: 560 },
+    { top: 560, bottom: 1220 },
+    { top: 1220, bottom: 1880 },
+  ];
+
+  assert.equal(getThemeSectionIndex(downward, 400), 1);
+  assert.equal(getThemeSectionIndex(upward, 400), 0);
+  assert.equal(getThemeSectionIndex([{ top: 700, bottom: 1200 }], 400), 0);
 });

@@ -839,27 +839,6 @@ button { color: inherit; }
   font-weight: 300;
   overflow-wrap: anywhere;
 }
-
-.wechat-canvas {
-  display: block;
-  width: 100%;
-  height: 54px;
-  color: inherit;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(22px, 3vw, 42px);
-}
-
-.copy-feedback {
-  min-height: 18px;
-  margin: 15px 0 0;
-  font-size: 11px;
-  opacity: 0;
-  transform: translateY(5px);
-  transition: opacity .2s, transform .2s;
-}
-
-.copy-feedback.is-visible { opacity: 1; transform: none; }
-
 footer {
   position: relative;
   z-index: 2;
@@ -1031,7 +1010,6 @@ footer {
   .contact h2 { font-size: 15vw; }
   .contact-item { grid-template-columns: 80px 1fr; gap: 15px; min-height: 118px; }
   .contact-item b { grid-column: 2; padding-bottom: 15px; }
-  .wechat-canvas { height: 42px; }
   footer { flex-direction: column; }
 }
 

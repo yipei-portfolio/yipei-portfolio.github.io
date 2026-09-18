@@ -2,8 +2,12 @@ import {
   LETTER_MOTION_PROFILES,
   applySectionTheme,
   getEntryVector,
+  getThemeSectionIndex,
   sampleHeadShake,
 } from "./site-motion.js";
+import { initPhotoMotion } from "./photo-motion.js";
+
+initPhotoMotion();
 
 const root = document.documentElement;
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -40,25 +44,39 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
 
 const themeSections = document.querySelectorAll(".theme-section");
 const themeMeta = document.querySelector('meta[name="theme-color"]');
+let themeFrame = 0;
+
+const updateSectionTheme = () => {
+  themeFrame = 0;
+  const index = getThemeSectionIndex(
+    [...themeSections].map((section) => section.getBoundingClientRect()),
+    window.innerHeight / 2,
+  );
+  const current = themeSections[index];
+  if (!current) return;
+  applySectionTheme(
+    root.style,
+    themeMeta,
+    current.dataset.bg,
+    current.dataset.ink,
+  );
+};
+
+const queueSectionThemeUpdate = () => {
+  if (themeFrame) return;
+  themeFrame = window.requestAnimationFrame(updateSectionTheme);
+};
 
 if ("IntersectionObserver" in window) {
   const themeObserver = new IntersectionObserver(
-    (entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-      applySectionTheme(
-        root.style,
-        themeMeta,
-        visible.target.dataset.bg,
-        visible.target.dataset.ink,
-      );
-    },
-    { rootMargin: "-35% 0px -35%", threshold: [0, 0.2, 0.5, 0.8] },
+    queueSectionThemeUpdate,
+    { threshold: [0, 0.2, 0.5, 0.8] },
   );
   themeSections.forEach((section) => themeObserver.observe(section));
 }
+window.addEventListener("scroll", queueSectionThemeUpdate, { passive: true });
+window.addEventListener("resize", queueSectionThemeUpdate);
+updateSectionTheme();
 
 const timeLabel = document.querySelector(".local-time b");
 if (timeLabel) {
@@ -229,60 +247,3 @@ const updateParallax = () => {
 };
 window.addEventListener("scroll", updateParallax, { passive: true });
 updateParallax();
-
-const copyWechat = document.querySelector(".copy-wechat");
-const wechatCanvas = document.querySelector(".wechat-canvas");
-const copyFeedback = document.querySelector(".copy-feedback");
-const wechatParts = ["134", "8211", "7805"];
-const resolveWechat = () => wechatParts.join("");
-let feedbackTimer;
-
-const drawWechat = () => {
-  if (!wechatCanvas) return;
-  const bounds = wechatCanvas.getBoundingClientRect();
-  if (!bounds.width || !bounds.height) return;
-
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, 3);
-  wechatCanvas.width = Math.round(bounds.width * pixelRatio);
-  wechatCanvas.height = Math.round(bounds.height * pixelRatio);
-
-  const context = wechatCanvas.getContext("2d");
-  if (!context) return;
-
-  const styles = getComputedStyle(wechatCanvas);
-  const fontSize = Number.parseFloat(styles.fontSize) || 32;
-  context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-  context.clearRect(0, 0, bounds.width, bounds.height);
-  context.font = `300 ${fontSize}px ${styles.fontFamily}`;
-  context.fillStyle = styles.color;
-  context.textAlign = "left";
-  context.textBaseline = "middle";
-  context.fillText(resolveWechat(), 0, bounds.height / 2);
-};
-
-const refreshWechatCanvas = () => {
-  requestAnimationFrame(drawWechat);
-  window.setTimeout(drawWechat, 280);
-};
-
-drawWechat();
-document.fonts?.ready.then(drawWechat);
-window.addEventListener("resize", drawWechat, { passive: true });
-if (window.ResizeObserver && wechatCanvas) {
-  new ResizeObserver(drawWechat).observe(wechatCanvas);
-}
-["pointerenter", "pointerleave", "focus", "blur"].forEach((eventName) => {
-  copyWechat?.addEventListener(eventName, refreshWechatCanvas);
-});
-
-copyWechat?.addEventListener("click", async () => {
-  const value = resolveWechat();
-  try {
-    await navigator.clipboard.writeText(value);
-  } catch {
-    return;
-  }
-  copyFeedback?.classList.add("is-visible");
-  clearTimeout(feedbackTimer);
-  feedbackTimer = setTimeout(() => copyFeedback?.classList.remove("is-visible"), 1800);
-});

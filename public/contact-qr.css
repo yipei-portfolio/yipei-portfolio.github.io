@@ -1,0 +1,29 @@
+/* Shared QR interaction. It does not change the home contact row or its motion. */
+.wechat-dialog {
+  border: 0;
+  border-radius: 4px;
+  padding: 0;
+  background: #f8f7f5;
+  color: #171717;
+  width: min(410px, calc(100% - 40px));
+  max-height: 90dvh;
+  box-shadow: 0 25px 80px #0004;
+  overscroll-behavior: contain;
+  font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.wechat-dialog::backdrop { background: #000a; backdrop-filter: blur(6px); }
+body:has(.wechat-dialog[open]) { overflow: hidden; }
+.wechat-dialog-body { padding: 34px; text-align: center; }
+.wechat-dialog .dialog-close {
+  position: absolute; right: 10px; top: 8px; border: 0;
+  background: transparent; color: #171717; font-size: 29px;
+  width: 38px; height: 38px; cursor: pointer;
+}
+.wechat-dialog .eyebrow { font: 11px/1.4 "Courier New", monospace; letter-spacing: .1em; }
+.contact .wechat-dialog h2 { font: 400 27px/1.4 Arial, "PingFang SC", sans-serif; margin: 13px 0 24px; letter-spacing: 0; }
+.wechat-dialog img { display: block; width: 100%; height: auto; background: white; }
+.wechat-dialog p { font-size: 12px; line-height: 1.8; color: #67635f; margin: 20px 0 0; }
+.wechat-dialog .text-link { display: inline-flex; align-items: center; gap: 32px; border-bottom: 1px solid currentColor; padding: 10px 0; font-size: 12px; }
+.wechat-dialog :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.qr-fallback { display: block; padding: 15px; }
+@media (max-width: 600px) { .wechat-dialog-body { padding: 30px 26px; } }

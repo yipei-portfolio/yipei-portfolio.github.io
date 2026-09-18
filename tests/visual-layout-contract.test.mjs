@@ -32,22 +32,62 @@ test("drives the approved A2 motion continuously instead of using a canned anima
   assert.doesNotMatch(script, /letter\.animate\(/);
 });
 
-test("lays out every About photo without overlap or cropping", () => {
-  const stack = rule(".about-frame-stack");
-  assert.match(stack, /display:\s*grid/);
-  assert.match(
-    stack,
-    /grid-template-columns:\s*minmax\(0,\s*1\.45fr\)\s+minmax\(0,\s*1fr\)/,
-  );
+test("About uses three layered paper photos with reference fade and hover timings", async () => {
+  const css = await readFile(new URL("../public/photo-motion.css", import.meta.url), "utf8");
+  for (const className of ["photo-main", "photo-left", "photo-right"]) {
+    assert.ok(css.includes(".about-gallery ." + className));
+  }
+  for (const delay of ["860ms", "1040ms", "1220ms"]) assert.ok(css.includes("--photo-delay: " + delay));
+  assert.match(css, /portrait-arrive 760ms ease/);
+  assert.match(css, /translateY\(-10px\) scale\(1\.06\) rotate\(var\(--photo-angle\)\)/);
+  assert.match(css, /z-index: 12/);
+  assert.match(css, /clip-path: polygon/);
+  assert.match(css, /prefers-reduced-motion/);
+  assert.match(css, /width: min\(100%, 360px\)/);
+});
 
-  const stackedFrame = rule(".about-frame-stack .portrait-frame");
-  assert.match(stackedFrame, /position:\s*relative/);
-  assert.doesNotMatch(stackedFrame, /position:\s*absolute/);
+test("retains every original homepage animation family", () => {
+  for (const name of ["nav-in", "wordmark-in", "wipe-in", "char-in", "soft-up", "contact-drift"]) {
+    assert.ok(styles.includes("@keyframes " + name), name + " should remain");
+  }
+  assert.match(script, /themeObserver/);
+  assert.match(script, /getThemeSectionIndex/);
+  assert.match(script, /window\.addEventListener\("scroll", queueSectionThemeUpdate/);
+  assert.match(script, /magneticNav/);
+  assert.match(script, /updateParallax/);
+  assert.doesNotMatch(script, /wechatParts|resolveWechat|clipboard/);
+});
 
-  assert.match(
-    rule(".portrait-main .portrait-media"),
-    /aspect-ratio:\s*3\s*\/\s*2/,
-  );
-  assert.match(rule(".portrait-media img"), /object-fit:\s*contain/);
-  assert.match(rule(".about-photo-rail"), /1\.45fr/);
+test("new case styles cannot change the original homepage", async () => {
+  const { default: postcss } = await import("postcss");
+  for (const file of ["case-studies.css", "case-evidence.css"]) {
+    const caseCss = await readFile(new URL(`../public/${file}`, import.meta.url), "utf8");
+    postcss.parse(caseCss).walkRules((rule) => {
+      for (const selector of rule.selectors) {
+        assert.ok(selector.startsWith(".case-page"), "unscoped selector: " + selector);
+      }
+    });
+  }
+});
+
+test("work preview and case exploration support keyboard focus and reduced motion", async () => {
+  const work = await readFile(new URL("../app/work-index.tsx", import.meta.url), "utf8");
+  const explorer = await readFile(new URL("../app/work/explorer.tsx", import.meta.url), "utf8");
+  const workCss = await readFile(new URL("../public/work-index.css", import.meta.url), "utf8");
+  assert.match(work, /onPointerEnter/);
+  assert.match(work, /onFocus/);
+  assert.match(work, /className="work-index-list reveal"/);
+  assert.doesNotMatch(work, /work-index-link reveal/);
+  assert.match(workCss, /prefers-reduced-motion/);
+  for (const key of ["ArrowLeft", "ArrowRight", "Home", "End"]) assert.ok(explorer.includes(key));
+  assert.match(explorer, /aria-selected/);
+  assert.match(explorer, /hidden=\{selected !== index\}/);
+});
+
+test("QR remains available with a native dialog and no-script fallback", async () => {
+  const contact = await readFile(new URL("../app/wechat-contact.tsx", import.meta.url), "utf8");
+  assert.match(contact, /showModal\(\)/);
+  assert.match(contact, /关闭微信二维码/);
+  assert.match(contact, /<noscript>/);
+  assert.doesNotMatch(contact, /clipboard|canvas|wechatParts/);
 });

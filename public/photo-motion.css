@@ -1,0 +1,124 @@
+/* The photograph, paper and tape move as one object; the wrapper only fades. */
+.about { padding: 80px var(--page-left) 145px; }
+.about .pill-row { margin-left: 0; }
+.about .about-layout { margin-top: 120px; }
+.about .about-title { max-width: 52%; }
+.about .about-title span { display: inline; color: inherit; font: inherit; letter-spacing: inherit; }
+.about .about-title h2 { display: inline; margin: 0; font: inherit; letter-spacing: inherit; }
+.about .about-title {
+  font-family: "Baskerville", "Times New Roman", serif;
+  font-size: clamp(54px, 6.2vw, 88px);
+  line-height: 1.05;
+  font-weight: 400;
+  letter-spacing: -.04em;
+}
+.about .about-title span::after { content: " "; }
+.about .about-content { display: block; margin-top: 70px; min-height: 460px; }
+.about .about-copy { width: 49%; max-width: 600px; }
+.about .about-gallery {
+  position: absolute;
+  top: -78px;
+  right: 7%;
+  width: 40%;
+  max-width: 480px;
+  aspect-ratio: 400 / 550;
+  margin: 0;
+  scroll-margin-top: 140px;
+  isolation: isolate;
+}
+.about-gallery .photo-reveal { position: absolute; opacity: 1; }
+.about-gallery .photo-main { left: 3%; top: 3%; width: 85%; z-index: 1; --photo-delay: 860ms; --photo-angle: -4deg; }
+.about-gallery .photo-left { left: 11%; top: 46%; width: 31%; z-index: 2; --photo-delay: 1040ms; --photo-angle: 1deg; }
+.about-gallery .photo-right { left: 41%; top: 52%; width: 55%; z-index: 3; --photo-delay: 1220ms; --photo-angle: 8deg; }
+.about-gallery.photo-motion-ready .photo-reveal:not(.is-photo-visible) { opacity: 0; }
+.about-gallery.photo-motion-ready .photo-reveal.is-photo-visible {
+  animation: portrait-arrive 760ms ease var(--photo-delay) both;
+}
+.about-gallery .photo-reveal:hover,
+.about-gallery .photo-reveal:has(:focus-visible) { z-index: 12; }
+.about-gallery .portrait-frame {
+  position: relative;
+  margin: 0;
+  padding: 5.5% 5.5% 10%;
+  border: 1px solid #d6d0c5;
+  background: linear-gradient(115deg, #f4f0e7, #faf7ef 52%, #eae5d9);
+  box-shadow: 0 2px 2px #0002, 0 16px 24px #00000024;
+  transform: rotate(var(--photo-angle));
+  transform-origin: center;
+  transition: transform 360ms cubic-bezier(.16, 1, .3, 1), box-shadow 260ms;
+}
+.about-gallery .portrait-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  background: repeating-linear-gradient(12deg, transparent 0 2px, #958d791c 2px 3px);
+}
+.about-gallery .portrait-main::before,
+.about-gallery .portrait-secondary::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 33%;
+  top: -8%;
+  width: 31%;
+  height: 12%;
+  background: #a99b88;
+  opacity: .76;
+  transform: rotate(-3deg);
+  clip-path: polygon(0 5%, 15% 0, 27% 7%, 69% 0, 91% 4%, 100% 1%, 98% 38%, 100% 64%, 97% 100%, 71% 94%, 43% 100%, 20% 95%, 1% 100%, 3% 59%);
+}
+.about-gallery .portrait-secondary::before { left: 18%; width: 56%; height: 12%; top: -11%; background: #c5a7a0; transform: rotate(-4deg); }
+.about-gallery .portrait-main .portrait-media { aspect-ratio: 16 / 9; }
+.about-gallery .portrait-secondary .portrait-media { aspect-ratio: 3 / 4; }
+.about-gallery .portrait-nature .portrait-media { aspect-ratio: 1.14 / 1; }
+.about-gallery .portrait-media img { width: 100%; height: 100%; object-fit: cover; }
+.about-gallery .portrait-nature img { object-position: center 45%; }
+.about-gallery .portrait-frame figcaption {
+  display: block;
+  margin: 3% 0 -6%;
+  color: #34342a;
+  font-family: "SignPainter", "Bradley Hand", "Segoe Print", cursive;
+  font-size: clamp(16px, 2.1vw, 28px);
+  line-height: 1.2;
+  letter-spacing: -.04em;
+}
+.about-gallery .portrait-frame:focus-visible { outline: 2px solid #67635f; outline-offset: 6px; }
+.about-gallery .portrait-frame:focus-visible,
+.about-gallery .portrait-frame:active {
+  transform: translateY(-10px) scale(1.06) rotate(var(--photo-angle));
+  box-shadow: 0 2px 2px #0002, 0 28px 44px #0003;
+}
+@media (hover: hover) and (pointer: fine) {
+  .about-gallery .portrait-frame:hover {
+    transform: translateY(-10px) scale(1.06) rotate(var(--photo-angle));
+    box-shadow: 0 2px 2px #0002, 0 28px 44px #0003;
+  }
+}
+@keyframes portrait-arrive { from { opacity: 0; } to { opacity: 1; } }
+@media (max-width: 900px) {
+  .about .about-layout { margin-top: 80px; }
+  .about .about-title { max-width: none; }
+  .about .about-gallery { top: 140px; right: 0; width: 43%; }
+  .about .about-copy { width: 51%; }
+}
+@media (max-width: 600px) {
+  .about { padding-inline: 20px; }
+  .about .about-layout { margin-top: 60px; }
+  .about .about-title { font-size: clamp(42px, 12vw, 64px); }
+  .about .about-content { display: flex; flex-direction: column; margin-top: 40px; }
+  .about .about-copy { width: 100%; }
+  .about .about-work-link { align-self: flex-start; }
+  .about .about-gallery { position: relative; top: auto; right: auto; width: min(100%, 360px); margin: 52px auto 0; }
+  .about-gallery .portrait-frame figcaption { font-size: clamp(17px, 5.4vw, 24px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .about-gallery.photo-motion-ready .photo-reveal:not(.is-photo-visible),
+  .about-gallery.photo-motion-ready .photo-reveal,
+  .about-gallery .photo-reveal { opacity: 1; animation: none; }
+  .about-gallery .portrait-frame,
+  .about-gallery .portrait-frame:hover,
+  .about-gallery .portrait-frame:active,
+  .about-gallery .portrait-frame:focus-visible { transform: rotate(var(--photo-angle)); transition: none; }
+}
