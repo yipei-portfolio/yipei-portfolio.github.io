@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "./analytics";
 import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://yipei-portfolio.github.io"),
@@ -43,6 +44,6 @@ export default function RootLayout({
         <link rel="stylesheet" href="/portfolio-media.css" />
         <link rel="icon" href="/favicon.svg" />
       </head>
-      <body>{children}</body>
+      <body>{children}<Analytics /></body>
     </html>;
 }
