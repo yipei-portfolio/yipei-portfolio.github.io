@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const work = [
   {
@@ -9,6 +9,7 @@ const work = [
     category: "产品实践",
     title: "把课前练习，连成一条线",
     tags: ["真实需求", "练习体验", "教师反馈"],
+    color: "#becdbb",
   },
   {
     slug: "ora-coffee",
@@ -16,6 +17,7 @@ const work = [
     category: "数据分析",
     title: "让经营数据，回答业务问题",
     tags: ["门店经营", "商品分析", "指标梳理"],
+    color: "#e5c992",
   },
   {
     slug: "choir",
@@ -23,6 +25,7 @@ const work = [
     category: "组织协作",
     title: "让不同声音，完成同一件事",
     tags: ["排练组织", "团队沟通", "舞台实践"],
+    color: "#b7acce",
   },
   {
     slug: "photography",
@@ -30,19 +33,27 @@ const work = [
     category: "摄影",
     title: "把日常里值得停留的瞬间，留下来",
     tags: ["日常观察", "光影", "生活片段"],
+    color: "#cfb8a9",
   },
 ];
 
 export function WorkIndex() {
-  const [active, setActive] = useState(0);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [focused, setFocused] = useState<number | null>(null);
+  const active = hovered ?? focused;
+
+  useEffect(() => {
+    // The scroll-theme controller decides which section owns the page color.
+    window.dispatchEvent(new Event("portfolio:themechange"));
+  }, [active]);
 
   return (
-    <section className="work-index theme-section" id="work" data-bg="#e8e5df" data-ink="#171717" aria-labelledby="work-heading">
+    <section className="work-index theme-section" id="work" data-bg={active === null ? "#e8e5df" : work[active].color} data-ink="#171717" aria-labelledby="work-heading">
       <div className="work-index-head reveal">
-        <h2 id="work-heading">Work<span aria-hidden="true">.</span></h2>
+        <h2 id="work-heading">Work</h2>
         <p>从真实的问题出发。<br />用数据理解，用产品连接，用协作完成。</p>
       </div>
-      <div className="work-index-body" data-active={active}>
+      <div className="work-index-body" data-active={active ?? "none"}>
         <div className="work-index-previews" aria-hidden="true">
           <figure className={`work-cover cover-chorus ${active === 0 ? "is-active" : ""}`}>
             <div className="work-mini-stage"><img src="/media/chorusgo-practice-capture.webp" alt="" width="282" height="606" loading="lazy" /></div>
@@ -61,13 +72,28 @@ export function WorkIndex() {
             <figcaption><span>PHOTOGRAPHY / EVERYDAY</span><strong>日常，也值得认真看。</strong><small>个人摄影 · 落日与海鸥</small></figcaption>
           </figure>
         </div>
-        <div className="work-index-list reveal">
+        <div className="work-index-list reveal" onPointerLeave={() => setHovered(null)}>
           {work.map((project, index) => (
-            <a key={project.slug} className={`work-index-link ${active === index ? "is-active" : ""}`} href={`/work/${project.slug}/`} onPointerEnter={() => setActive(index)} onFocus={() => setActive(index)} aria-label={`${project.name}：${project.title}，阅读${project.category}案例`}>
-              <div className="work-index-meta"><span>0{index + 1} / {project.category}</span><span>{project.tags.join(" · ")}</span></div>
-              <div className={`work-index-title title-${project.slug}`}><h3>{project.name}</h3><span aria-hidden="true">↗</span></div>
+            <a
+              key={project.slug}
+              className={`work-index-link ${active === index ? "is-active" : ""}`}
+              href={`/work/${project.slug}/`}
+              onPointerEnter={(event) => {
+                if (event.pointerType !== "touch") setHovered(index);
+              }}
+              onFocus={() => {
+                setHovered(null);
+                setFocused(index);
+              }}
+              onBlur={() => setFocused(null)}
+              aria-label={`${project.name}：${project.title}，阅读${project.category}案例`}
+            >
+              <div className={`work-index-title title-${project.slug}`}><h3>{project.name}</h3><span className="work-open-arrow" aria-hidden="true">↗</span></div>
+              <div className="work-index-details">
+                <p>{project.title}</p>
+                <div className="work-index-tags"><span>{project.category}</span>{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
+              </div>
               <div className="work-mobile-image" aria-hidden="true"><img src={["/media/chorusgo-practice-capture.webp", "/media/ora-store.webp?v=20260918", "/media/choir-conducting.webp", "/media/photography-gulls.webp"][index]} alt="" loading="lazy" />{index === 0 && <small>小程序练习页 · 历史快照</small>}</div>
-              <p>{project.title}</p>
             </a>
           ))}
         </div>

@@ -91,3 +91,31 @@ test("QR remains available with a native dialog and no-script fallback", async (
   assert.match(contact, /<noscript>/);
   assert.doesNotMatch(contact, /clipboard|canvas|wechatParts/);
 });
+
+test("Work coordinates expansion, staggered tags, image reveal and section color", async () => {
+  const work = await readFile(new URL("../app/work-index.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../public/work-index.css", import.meta.url), "utf8");
+  const media = await readFile(new URL("../public/portfolio-media.css", import.meta.url), "utf8");
+  assert.match(work, /useState<number \| null>\(null\)/);
+  assert.match(work, /active = hovered \?\? focused/);
+  assert.match(work, /onPointerLeave/);
+  assert.match(work, /onBlur/);
+  assert.match(work, /event.pointerType !== "touch"/);
+  assert.match(work, /data-bg=\{active === null \? "#e8e5df" : work\[active\].color\}/);
+  assert.match(work, /new Event\("portfolio:themechange"\)/);
+  assert.match(script, /addEventListener\("portfolio:themechange", queueSectionThemeUpdate\)/);
+  assert.match(css, /\.work-index-link\.is-active \.work-index-details \{ height: 96px/);
+  for (const delay of [".15s", ".3s", ".45s"]) assert.ok(css.includes(`transition-delay: ${delay}`));
+  assert.match(css, /position: sticky/);
+  assert.doesNotMatch(css, /rotate\(|data-active=/);
+  assert.doesNotMatch(media, /\.work-index|\.work-cover|\.work-mini-stage/);
+});
+
+test("Work touch layout reveals every project without trapping or delaying navigation", async () => {
+  const work = await readFile(new URL("../app/work-index.tsx", import.meta.url), "utf8");
+  const css = await readFile(new URL("../public/work-index.css", import.meta.url), "utf8");
+  assert.match(css, /@media \(max-width: 900px\), \(hover: none\)/);
+  assert.match(css, /\.work-index-details, \.work-index-link\.is-active \.work-index-details \{ height: auto; opacity: 1/);
+  assert.match(css, /\.work-mobile-image \{ display: flex/);
+  assert.doesNotMatch(work, /preventDefault|setTimeout|onTouchEnd/);
+});

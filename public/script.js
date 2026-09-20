@@ -76,6 +76,7 @@ if ("IntersectionObserver" in window) {
 }
 window.addEventListener("scroll", queueSectionThemeUpdate, { passive: true });
 window.addEventListener("resize", queueSectionThemeUpdate);
+window.addEventListener("portfolio:themechange", queueSectionThemeUpdate);
 updateSectionTheme();
 
 const timeLabel = document.querySelector(".local-time b");
