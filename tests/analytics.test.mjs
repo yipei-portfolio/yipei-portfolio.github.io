@@ -13,9 +13,9 @@ function run({ hostname = "yipei-portfolio.github.io", token = siteToken, search
     navigator: { doNotTrack, globalPrivacyControl },
     window: { location: { hostname, search } },
     document: {
-      querySelector: () => ({ getAttribute: () => token }),
+      querySelector: () => ({ dataset: {}, getAttribute: () => token }),
       getElementById: () => existing ? {} : null,
-      createElement: () => ({ attributes: {}, setAttribute(name, value) { this.attributes[name] = value; } }),
+      createElement: () => ({ attributes: {}, addEventListener() {}, setAttribute(name, value) { this.attributes[name] = value; } }),
       head: { appendChild: (element) => inserted.push(element) },
     },
   });
