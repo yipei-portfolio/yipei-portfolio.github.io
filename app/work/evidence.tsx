@@ -52,18 +52,84 @@ function Mapping({ rows }: { rows: [string, string][] }) {
   return <div className="case-mapping">{rows.map(([need, response]) => <div key={need}><p>{need}</p><span aria-hidden="true">→</span><p>{response}</p></div>)}</div>;
 }
 
+export function PhoneScreens({ screens, note }: { screens: { src: string; alt: string; label: string }[]; note: string }) {
+  return (
+    <figure className="phone-screens">
+      <div className="phone-row">
+        {screens.map((screen) => (
+          <div className="phone-shot" key={screen.src}>
+            <img src={screen.src} alt={screen.alt} width="390" height="844" loading="lazy" decoding="async" />
+            <span>{screen.label}</span>
+          </div>
+        ))}
+      </div>
+      <figcaption>{note}</figcaption>
+    </figure>
+  );
+}
+
+const roles: [string, string][] = [
+  ["团员", "查看作业与乐谱，跟着示范练习，提交录音并查看反馈"],
+  ["指挥", "发布作业，集中查看提交，给出人工评分与评语"],
+  ["团长", "管理成员名单、活动接龙与排练考勤"],
+];
+
+// Structure only: module names and data flow, no business figures.
+function DashboardBlueprint() {
+  return (
+    <div className="blueprint" aria-label="经营分析看板结构示意">
+      <p className="blueprint-note">看板结构示意 · 不含内部经营数据</p>
+      <ol className="blueprint-flow">
+        {[["数据源", "ClickHouse"], ["指标加工", "SQL · BI 计算字段"], ["口径校验", "周期对比 · 筛选联动"], ["经营复盘", "观远 BI 页面"]].map(([label, text], index) => (
+          <li key={label}><span>0{index + 1}</span><strong>{label}</strong><small>{text}</small></li>
+        ))}
+      </ol>
+      <div className="blueprint-modules">
+        {[["销售趋势", "整体与周期变化"], ["渠道结构", "不同渠道的销售构成"], ["门店分析", "门店之间的差异"], ["SKU 分析", "商品与组合表现"]].map(([label, text]) => (
+          <div key={label}><strong>{label}</strong><small>{text}</small><i aria-hidden="true" /></div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FinanceTool() {
+  return (
+    <div className="finance-tool">
+      <div className="finance-metrics">
+        <span>核心指标</span>
+        <p>{["收入", "成本", "EBITDA", "回本周期"].map((metric) => <b key={metric}>{metric}</b>)}</p>
+      </div>
+      <ol className="case-journey finance-steps" aria-label="财务经营工具的交付流程">
+        {["月度数据更新", "指标统一计算", "离线 HTML 看板", "管理层交付"].map((label, index) => <li key={label}><span>0{index + 1}</span>{label}</li>)}
+      </ol>
+    </div>
+  );
+}
+
 export function CaseEvidence({ slug, stage }: { slug: string; stage: number }) {
   if (slug === "chorusgo") {
     if (stage === 0) return <Mapping rows={[["团员：自己的声部和范围在哪里？", "资料需要跟着具体任务走。"], ["指挥：排练前，大家准备得怎样？", "提交与反馈需要集中查看。"]]} />;
     if (stage === 1) return <ol className="case-journey" aria-label="练习与回课路径">{["任务清楚", "资料相连", "提交可回听", "反馈有去处"].map((label, index) => <li key={label}><span>0{index + 1}</span>{label}</li>)}</ol>;
     if (stage === 2) return <Explorer id="practice" items={practice} note="练习路径说明 · 展示产品思路，非产品界面" />;
-    return <div className="case-outcome"><div><span>已形成的内容</span><p>练习、录音提交与人工反馈的体验流程。</p></div><div><span>下一步验证</span><p>首次练习能否独立完成；教师能否顺手找到提交并回课。</p></div></div>;
+    if (stage === 4) return (
+      <div className="role-matrix">
+        <table>
+          <caption>角色与权限</caption>
+          <thead><tr><th scope="col">角色</th><th scope="col">主要任务</th><th scope="col">界面</th></tr></thead>
+          <tbody>{roles.map(([role, task], index) => <tr key={role}><th scope="row">{role}</th><td>{task}</td>{index === 0 && <td>五个页签：今日、乐谱、作业、记录、我的</td>}{index === 1 && <td rowSpan={2}>管理端四个页签，增加作业发布、成员名单与考勤数据</td>}</tr>)}</tbody>
+        </table>
+        <PhoneScreens note="团长工作台 · 界面预览，使用示例数据" screens={[{ src: "/media/chorusgo-ui-admin.webp", alt: "ChorusGO 团长工作台：乐谱、作业、活动接龙、排练考勤、成员名单、考勤数据与练习记录入口", label: "团长 · 工作台" }]} />
+      </div>
+    );
+    return <div className="case-outcome"><div><span>已形成的内容</span><p>三类角色的练习、录音提交、人工反馈与成员管理流程。</p></div><div><span>下一步验证</span><p>首次练习能否独立完成；教师能否顺手找到提交并回课。</p></div></div>;
   }
   if (slug === "ora-coffee") {
     if (stage === 0) return <Mapping rows={[["看见销售变化", "先确认时间、范围与统计口径。"], ["想要解释原因", "再按门店、商品与渠道寻找线索。"], ["准备给出建议", "区分已知事实与待验证判断。"]]} />;
     if (stage === 1) return <div className="case-principle"><span>分析交付的三个问题</span><p>在比较什么？<br />为什么这样比较？<br /><em>还缺什么证据？</em></p></div>;
     if (stage === 2) return <Explorer id="analysis" items={analysis} note="分析方法示意 · 不含内部经营数据或量化业绩" />;
-    return <div className="case-outcome"><div><span>工作产出</span><p>经营分析、指标口径整理、看板优化与分析工具整理。</p></div><div><span>表达边界</span><p>不公开内部数据，不将经营变化直接归因于个人工作。</p></div></div>;
+    if (stage === 3) return <DashboardBlueprint />;
+    return <FinanceTool />;
   }
   if (stage === 0) return <figure className="story-photo"><img src="/media/choir-live.webp" alt="合唱团与指挥在舞台上演出" width="2200" height="1650" loading="lazy" /><figcaption>舞台上的表达，来自舞台下的倾听与配合。</figcaption></figure>;
   if (stage === 1) return <Mapping rows={[["团长的视角", "关注安排、沟通和团队整体节奏。"], ["助理指挥的视角", "关注声部需要、现场倾听与配合。"]]} />;

@@ -42,6 +42,7 @@ export default function RootLayout({
         <link rel="stylesheet" href="/case-evidence.css" />
         <link rel="stylesheet" href="/contact-qr.css" />
         <link rel="stylesheet" href="/portfolio-media.css" />
+        <link rel="stylesheet" href="/case-layout.css" />
         <link rel="icon" href="/favicon.svg" />
       </head>
       <body>{children}<Analytics /></body>

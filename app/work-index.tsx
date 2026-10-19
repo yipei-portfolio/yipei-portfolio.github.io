@@ -8,7 +8,7 @@ const work = [
     name: "ChorusGO",
     category: "产品实践",
     title: "把课前练习，连成一条线",
-    tags: ["真实需求", "练习体验", "教师反馈"],
+    tags: ["AI 辅助开发", "角色权限", "练习闭环"],
     color: "#becdbb",
   },
   {
@@ -16,7 +16,7 @@ const work = [
     name: "Ora Coffee",
     category: "数据分析",
     title: "让经营数据，回答业务问题",
-    tags: ["门店经营", "商品分析", "指标梳理"],
+    tags: ["观远 BI", "SQL", "指标体系"],
     color: "#e5c992",
   },
   {
@@ -24,7 +24,7 @@ const work = [
     name: "Choir",
     category: "组织协作",
     title: "让不同声音，完成同一件事",
-    tags: ["排练组织", "团队沟通", "舞台实践"],
+    tags: ["110 人团队", "排练组织", "专场演出"],
     color: "#b7acce",
   },
   {
@@ -56,8 +56,8 @@ export function WorkIndex() {
       <div className="work-index-body" data-active={active ?? "none"}>
         <div className="work-index-previews" aria-hidden="true">
           <figure className={`work-cover cover-chorus ${active === 0 ? "is-active" : ""}`}>
-            <div className="work-mini-stage"><img src="/media/chorusgo-practice-capture.webp" alt="" width="282" height="606" loading="lazy" /></div>
-            <figcaption><span>CHORUSGO / PRACTICE</span><strong>从自己的声部，开始练习。</strong><small>小程序练习页 · 历史快照</small></figcaption>
+            <div className="work-mini-stage"><img src="/media/chorusgo-ui-home.webp" alt="" width="390" height="844" loading="lazy" /></div>
+            <figcaption><span>CHORUSGO / PRACTICE</span><strong>从自己的声部，开始练习。</strong><small>小程序界面 · 示例数据</small></figcaption>
           </figure>
           <figure className={`work-cover cover-ora ${active === 1 ? "is-active" : ""}`}>
             <img src="/media/ora-store.webp?v=20260918" alt="" width="1080" height="1441" loading="lazy" />
@@ -93,7 +93,7 @@ export function WorkIndex() {
                 <p>{project.title}</p>
                 <div className="work-index-tags"><span>{project.category}</span>{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
               </div>
-              <div className="work-mobile-image" aria-hidden="true"><img src={["/media/chorusgo-practice-capture.webp", "/media/ora-store.webp?v=20260918", "/media/choir-conducting.webp", "/media/photography-gulls.webp"][index]} alt="" loading="lazy" />{index === 0 && <small>小程序练习页 · 历史快照</small>}</div>
+              <div className="work-mobile-image" aria-hidden="true"><img src={["/media/chorusgo-ui-home.webp", "/media/ora-store.webp?v=20260918", "/media/choir-conducting.webp", "/media/photography-gulls.webp"][index]} alt="" loading="lazy" />{index === 0 && <small>小程序界面 · 示例数据</small>}</div>
             </a>
           ))}
         </div>

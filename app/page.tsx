@@ -39,7 +39,7 @@ export default function Home() {
               <span className="wipe-line">Make things clear.</span>
             </h1>
             <p className="hero-description" data-split>
-              我是李忆沛，关注数据分析、产品实践与团队协作。我喜欢理解真实业务，把复杂问题理清楚，再把想法做成有用的工具。
+              我是李忆沛，目前在 Ora Coffee 做数据分析。我习惯先把业务问题理清楚，再用 SQL、BI 和 Python 找答案，也用 AI 辅助开发把真实需求做成小程序。
             </p>
           </div>
           <div className="hero-meta">
@@ -64,6 +64,13 @@ export default function Home() {
                 <p>相比单纯呈现数字，我更在意它能否帮助团队看清问题、形成判断。我的习惯是先明确业务问题，再梳理事实、可能原因与需要进一步确认的部分。</p>
                 <p>数据之外，我曾担任大学合唱团团长和助理指挥，参与团队管理、排练组织与演出。这段经历让我学会倾听与协作，也成为 ChorusGO 的灵感来源。</p>
                 <p>无论面对数据还是团队，我都希望让信息更清楚，让每个人的部分能够接起来。</p>
+              </div>
+              <div className="about-timeline reveal">
+                <span>EXPERIENCE</span>
+                <ol>
+                  <li><time>2026.07 — 至今</time><strong>皮氏咖啡 · Ora Coffee</strong><small>数据分析实习</small></li>
+                  <li><time>2025.05 — 至今</time><strong>上海海事大学学生合唱团</strong><small>团长 · 助理指挥</small></li>
+                </ol>
               </div>
               <aside className="about-gallery" id="photos" aria-label="生活与舞台照片拼贴">
                 <div className="photo-reveal photo-main">

@@ -17,7 +17,7 @@ test("home retains its animated section rhythm and links to three exported case 
   for (const slug of slugs) {
     assert.ok(home.includes(`href="/work/${slug}/"`));
     const html = await readFile(new URL(`work/${slug}/index.html`, output), "utf8");
-    assert.equal((html.match(/class="narrative-section"/g) ?? []).length, slug === "chorusgo" ? 3 : 2);
+    assert.equal((html.match(/class="narrative-section"/g) ?? []).length, { chorusgo: 4, "ora-coffee": 3, choir: 2 }[slug]);
     assert.doesNotMatch(html, /STAR|star-section|star-label|案例目录|业务背景|项目目标|工作目标|承担任务|阶段成果|经历收获/);
     assert.ok(html.includes('href="/#work"'));
     assert.ok(html.includes('class="next-project wrap"'));
@@ -68,8 +68,8 @@ test("work directory separates four subjects and never reuses About portraits", 
   assert.equal((directory.match(/class="work-index-link /g) ?? []).length, 4);
   assert.equal((directory.match(/class="work-cover /g) ?? []).length, 4);
   assert.doesNotMatch(directory, /stage-memory.jpg|performance-stage.jpg|travel-macau.jpg|nature-waterfall.jpg|chorusgo-miniprogram.jpeg/);
-  for (const image of ["chorusgo-practice-capture.webp", "ora-store.webp", "choir-conducting.webp", "photography-gulls.webp"]) assert.ok(directory.includes(image));
-  assert.match(directory, /历史快照/);
+  for (const image of ["chorusgo-ui-home.webp", "ora-store.webp", "choir-conducting.webp", "photography-gulls.webp"]) assert.ok(directory.includes(image));
+  assert.match(directory, /示例数据/);
   assert.match(directory, /href="\/work\/photography\/"/);
 });
 
@@ -90,7 +90,7 @@ test("web image derivatives remove private metadata and preserve valid dimension
   const { default: sharp } = await import("sharp");
   const { fileURLToPath } = await import("node:url");
   const files = await readdir(new URL("media/", output));
-  assert.equal(files.length, 14);
+  assert.equal(files.length, 18);
   for (const file of files) {
     const meta = await sharp(fileURLToPath(new URL(`media/${file}`, output))).metadata();
     assert.equal(meta.format, "webp");
@@ -101,7 +101,7 @@ test("web image derivatives remove private metadata and preserve valid dimension
 });
 
 test("project stories use subject-specific sections and retain linked exploratory panels", async () => {
-  const sections = { chorusgo: ["rehearsal", "practice", "in-progress"], "ora-coffee": ["behind-the-numbers", "reading-the-business"], choir: ["singing-together", "beyond-the-stage"] };
+  const sections = { chorusgo: ["rehearsal", "practice", "roles", "in-progress"], "ora-coffee": ["behind-the-numbers", "reading-the-business", "finance-tool"], choir: ["singing-together", "beyond-the-stage"] };
   for (const slug of slugs) {
     const html = await readFile(new URL(`work/${slug}/index.html`, output), "utf8");
     for (const anchor of sections[slug]) {
@@ -128,4 +128,18 @@ test("case copy is business-oriented and honest about product maturity", async (
   const chorus = await readFile(new URL("work/chorusgo/index.html", output), "utf8");
   assert.match(chorus, /尚未以真实用户的长期使用数据证明效果/);
   assert.doesNotMatch(chorus, /登录界面/);
+  for (const screen of ["home", "assignments", "detail", "admin"]) assert.ok(chorus.includes(`/media/chorusgo-ui-${screen}.webp`));
+  assert.match(chorus, /示例数据/);
+});
+
+test("case pages surface role, toolkit, period and resume-backed scope figures", async () => {
+  const expected = { chorusgo: ["Coding Agent", "2026.07"], "ora-coffee": ["ClickHouse", "58"], choir: ["110", "2025.05"] };
+  for (const slug of slugs) {
+    const html = await readFile(new URL(`work/${slug}/index.html`, output), "utf8");
+    assert.ok(html.includes('class="case-grid wrap"'));
+    assert.ok(html.includes('class="case-stats"'));
+    for (const text of expected[slug]) assert.ok(html.includes(text), `${slug}: ${text}`);
+  }
+  const ora = await readFile(new URL("work/ora-coffee/index.html", output), "utf8");
+  assert.match(ora, /不含内部经营数据/);
 });
